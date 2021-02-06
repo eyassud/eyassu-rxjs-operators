@@ -9,9 +9,16 @@ export class InMemoryDataService implements InMemoryDbService {
     const fieldOffices = [
       { id: 1, name: 'Baltimore' },
       { id: 2, name: 'Newyork' },
-      { id: 4, name: 'St Louis' },
-      { id: 5, name: 'Washington D.C.' }
+      { id: 3, name: 'St Louis' },
+      { id: 4, name: 'Washington D.C.' }
     ];
-    return {fieldOffices};
+
+    const sources = [
+      { id: 's1', name: 'Man1', fieldOfficeId: 1 },
+      { id: 's2', name: 'Woman1', fieldOfficeId: 2 },
+      { id: 's3', name: 'Woman2', fieldOfficeId: 3 }
+    ];
+
+    return { fieldOffices, sources };
   }
 }

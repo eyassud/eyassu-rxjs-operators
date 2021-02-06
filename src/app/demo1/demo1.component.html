@@ -1,4 +1,35 @@
-<div class="content" role="main">
-  <button (click)="btnClick()">Get Data</button>
-</div>
+<div style="margin:auto; width: 38%;">
 
+  <p-fieldset legend="Solution 1" [toggleable]="true" [collapsed]="true" [style]="{ }">
+    <p-dropdown [options]="fieldOffices" optionLabel="name" optionValue="id" (onChange)="onOfficeSelected1($event)"
+      [style]="{'width': '300px'}"></p-dropdown>
+    <br />
+    <br />
+    <br />
+    Field Office: <code *ngIf="fieldOffice1">{{ fieldOffice1 | json }}</code>
+  </p-fieldset>
+
+  <br />
+
+  <p-fieldset legend="Solution 3" [toggleable]="true" [collapsed]="true" [style]="{ }">
+    <p-dropdown [options]="fieldOffices" optionLabel="name" optionValue="id" (onChange)="onOfficeSelected3($event)"
+      [style]="{'width': '300px'}"></p-dropdown>
+    <br />
+    <br />
+    <br />
+    Field Office: <code *ngIf="fieldOffice3">{{ fieldOffice3 | json }}</code>
+  </p-fieldset>
+
+  <br />
+
+  <p-fieldset legend="Solution 4" [toggleable]="true" [collapsed]="true" [style]="{ }">
+
+    <p-dropdown [options]="fieldOffices$ | async" optionLabel="name" optionValue="id" (onChange)="onOfficeSelected4($event)"
+      [style]="{'width': '300px'}"></p-dropdown>
+
+    <br />
+    <br />
+    <br />
+    Field Office: <code *ngIf="fieldOfficeIdAction4$ | async as fieldOffice">{{ fieldOffice4 | json }}</code>
+  </p-fieldset>
+</div>

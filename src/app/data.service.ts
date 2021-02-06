@@ -1,18 +1,37 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IFieldOffice } from './data.model';
-
+import { IFieldOffice, ISource } from './data.model';
+import { delay, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  private dataUrl = 'api/fieldOffices';
+  private delay = 10000;
+  private dataUrl = 'api';
 
   constructor(private readonly http: HttpClient) { }
 
-  getHeroes(): Observable<Array<IFieldOffice>> {
-    return this.http.get<Array<IFieldOffice>>(this.dataUrl);
+  getFieldOffice(officeId: number): Observable<IFieldOffice> {
+    const url = `${this.dataUrl}/fieldOffices/${officeId}`;
+
+    return this.http.get<IFieldOffice>(url)
+      .pipe(
+        tap(() => console.log(`Delay: ${this.delay / officeId} for office: ${officeId}`)),
+        delay(this.delay / officeId)
+      );
+  }
+
+  getAllFieldOffices(): Observable<Array<IFieldOffice>> {
+    const url = `${this.dataUrl}/fieldOffices`;
+
+    return this.http.get<Array<IFieldOffice>>(url);
+  }
+
+  getAllSources(): Observable<Array<ISource>> {
+    const url = `${this.dataUrl}/sources`;
+
+    return this.http.get<Array<ISource>>(url);
   }
 }
