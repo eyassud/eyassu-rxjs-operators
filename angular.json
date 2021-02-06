@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "eyassu-rxjs-operators"
+  "defaultProject": "eyassu-rxjs-operators",
+  "cli": {
+    "analytics": false
+  }
 }
