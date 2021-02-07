@@ -1,0 +1,39 @@
+<div style="margin:auto; width: 38%;">
+
+  <p-fieldset legend="Solution 1 (Avoid - Order Ignored)" [toggleable]="true" [collapsed]="true" >
+    <p-button label="Get Baltimore(1), Newyork(2), St. Louis(3) Sources" (onClick)="onBtnClick1()"></p-button>
+    <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"></button>
+    <br />
+    <br />
+
+    <div *ngFor="let source of sources1">
+      <strong>Source: </strong><code>{{ source | json }}</code>
+    </div>
+  </p-fieldset>
+  <br />
+  <br />
+
+  <p-fieldset legend="Solution 2 (Better - Order Maintained)" [toggleable]="true" [collapsed]="true" [style]="{ }">
+    <p-button label="Get Baltimore(1), Newyork(2), St. Louis(3) Sources" (onClick)="onBtnClick2()"></p-button>
+    <button pButton pRipple type="button" icon="pi pi-bell" class="p-button-rounded p-button-warning"></button>
+    <br />
+    <br />
+
+    <div *ngFor="let source of sources2">
+      <strong>Source: </strong><code>{{ source | json }}</code>
+    </div>
+  </p-fieldset>
+  <br />
+  <br />
+
+  <p-fieldset legend="Solution 3 (Best - Order Maintained)" [toggleable]="true" [collapsed]="true" [style]="{ }">
+    <p-button label="Get Baltimore(1), Newyork(2), St. Louis(3) Sources" (onClick)="onBtnClick3()"></p-button>
+    <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded"></button>
+    <br />
+    <br />
+
+    <div *ngFor="let source of (sources3$ | async)">
+      <strong>Source: </strong><code>{{ source | json }}</code>
+    </div>
+  </p-fieldset>
+</div>

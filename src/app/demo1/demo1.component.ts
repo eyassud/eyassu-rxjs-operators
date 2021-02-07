@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { IFieldOffice } from '../data.model';
 import { DataService } from '../data.service';
@@ -9,11 +9,21 @@ import { DataService } from '../data.service';
   templateUrl: './demo1.component.html',
   styleUrls: ['./demo1.component.scss']
 })
-export class Demo1Component implements OnInit {
-  fieldOffices = [];
+export class Demo1Component implements OnInit, OnDestroy {
+  fieldOffices: IFieldOffice[] = [];
 
   //#region Solution 1
   fieldOffice1: IFieldOffice | null = null;
+  subscription1: Subscription | undefined;
+  //#endregion
+
+  //#region Solution 2
+  fieldOffice2: IFieldOffice | null = null;
+  subscription2: Subscription | undefined;
+  private fieldOfficeIdSubject2 = new Subject<number>();
+  fieldOfficeIdAction2$ = this.fieldOfficeIdSubject2.asObservable()
+    .pipe(
+      switchMap(fieldOfficeId => this.dataService.getFieldOffice(fieldOfficeId)));
   //#endregion
 
   //#region Solution 3
@@ -24,17 +34,6 @@ export class Demo1Component implements OnInit {
       switchMap(fieldOfficeId => this.dataService.getFieldOffice(fieldOfficeId)));
   //#endregion
 
-  //#region Solution 4
-  fieldOffice4: IFieldOffice | null = null;
-  fieldOffices$ = this.dataService.getAllFieldOffices();
-  private fieldOfficeIdSubject4 = new Subject<number>();
-  fieldOfficeIdAction4$ = this.fieldOfficeIdSubject4.asObservable()
-    .pipe(
-      switchMap(fieldOfficeId => {
-        return this.dataService.getFieldOffice(fieldOfficeId);
-      }));
-  //#endregion
-
   constructor(private readonly dataService: DataService) { }
 
   ngOnInit(): void {
@@ -42,31 +41,43 @@ export class Demo1Component implements OnInit {
       .subscribe(offices => this.fieldOffices = offices);
   }
 
+  ngOnDestroy(): void {
+    this.subscription1?.unsubscribe();
+    this.subscription2?.unsubscribe();
+    this.fieldOfficeIdSubject2?.unsubscribe();
+    // ...
+  }
+
   //#region Solution 1
   onOfficeSelected1(event: any): void {
-    this.dataService.getFieldOffice(+event.value)
+    this.log(event);
+    this.subscription1 = this.dataService.getFieldOffice(+event.value)
       .subscribe(
-        o => {
-          this.fieldOffice1 = o;
-        });
+        o => this.fieldOffice1 = o);
+  }
+  //#endregion
+
+  //#region Solution 2
+  onOfficeSelected2(event: any): void {
+    this.log(event);
+    this.fieldOfficeIdSubject2.next(+event.value);
+    this.subscription2 = this.fieldOfficeIdAction2$
+      .subscribe(
+        fieldOffice => this.fieldOffice2 = fieldOffice);
   }
   //#endregion
 
   //#region Solution 3
   onOfficeSelected3(event: any): void {
+    this.log(event);
     this.fieldOfficeIdSubject3.next(+event.value);
-    this.fieldOfficeIdAction3$
-      .subscribe(
-        o => {
-          console.log(JSON.stringify(o));
-          this.fieldOffice3 = o;
-        });
   }
   //#endregion
 
-  //#region Solution 4
-  onOfficeSelected4(event: any): void {
-    this.fieldOfficeIdSubject4.next(+event.value);
+  //#region Private methods
+  private log(event: any): void {
+    console.log(`Getting ${this.fieldOffices.find(fieldOffice => fieldOffice.id === +event.value)?.name} ` +
+      `(delay: ${(this.dataService.delay / +event.value).toFixed(0)} ms)`);
   }
   //#endregion
 }

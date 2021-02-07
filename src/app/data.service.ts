@@ -8,7 +8,7 @@ import { delay, tap } from 'rxjs/operators';
 })
 export class DataService {
 
-  private delay = 10000;
+  public delay = 10000;
   private dataUrl = 'api';
 
   constructor(private readonly http: HttpClient) { }
@@ -18,7 +18,6 @@ export class DataService {
 
     return this.http.get<IFieldOffice>(url)
       .pipe(
-        tap(() => console.log(`Delay: ${this.delay / officeId} for office: ${officeId}`)),
         delay(this.delay / officeId)
       );
   }
@@ -27,6 +26,12 @@ export class DataService {
     const url = `${this.dataUrl}/fieldOffices`;
 
     return this.http.get<Array<IFieldOffice>>(url);
+  }
+
+  getSourcesByFieldOffice(fieldOfficeId: number): Observable<Array<ISource>> {
+    const url = `${this.dataUrl}/sources/?fieldOfficeId=${fieldOfficeId}`;
+
+    return this.http.get<Array<ISource>>(url);
   }
 
   getAllSources(): Observable<Array<ISource>> {
