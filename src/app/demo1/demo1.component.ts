@@ -20,16 +20,16 @@ export class Demo1Component implements OnInit, OnDestroy {
   //#region Solution 2
   fieldOffice2: IFieldOffice | null = null;
   subscription2: Subscription | undefined;
-  private fieldOfficeIdSubject2 = new Subject<number>();
-  fieldOfficeIdAction2$ = this.fieldOfficeIdSubject2.asObservable()
+  private solution2Subject = new Subject<number>();
+  solution2Action$ = this.solution2Subject.asObservable()
     .pipe(
       switchMap(fieldOfficeId => this.dataService.getFieldOffice(fieldOfficeId)));
   //#endregion
 
   //#region Solution 3
   fieldOffice3: IFieldOffice | null = null;
-  private fieldOfficeIdSubject3 = new Subject<number>();
-  fieldOfficeIdAction3$ = this.fieldOfficeIdSubject3.asObservable()
+  private solution3Subject = new Subject<number>();
+  solution3Action$ = this.solution3Subject.asObservable()
     .pipe(
       switchMap(fieldOfficeId => this.dataService.getFieldOffice(fieldOfficeId)));
   //#endregion
@@ -44,7 +44,7 @@ export class Demo1Component implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription1?.unsubscribe();
     this.subscription2?.unsubscribe();
-    this.fieldOfficeIdSubject2?.unsubscribe();
+    this.solution2Subject?.unsubscribe();
     // ...
   }
 
@@ -60,8 +60,8 @@ export class Demo1Component implements OnInit, OnDestroy {
   //#region Solution 2
   onOfficeSelected2(event: any): void {
     this.log(event);
-    this.fieldOfficeIdSubject2.next(+event.value);
-    this.subscription2 = this.fieldOfficeIdAction2$
+    this.solution2Subject.next(+event.value);
+    this.subscription2 = this.solution2Action$
       .subscribe(
         fieldOffice => this.fieldOffice2 = fieldOffice);
   }
@@ -70,7 +70,7 @@ export class Demo1Component implements OnInit, OnDestroy {
   //#region Solution 3
   onOfficeSelected3(event: any): void {
     this.log(event);
-    this.fieldOfficeIdSubject3.next(+event.value);
+    this.solution3Subject.next(+event.value);
   }
   //#endregion
 
