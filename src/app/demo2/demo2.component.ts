@@ -1,7 +1,7 @@
 import { ThrowStmt } from '@angular/compiler';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EMPTY, Observable, of, Subscription } from 'rxjs';
-import { combineAll, concatMap, map } from 'rxjs/operators';
+import { combineAll, concatMap, map, mergeAll, mergeScan } from 'rxjs/operators';
 import { IFieldOffice, ISource } from '../data.model';
 import { DataService } from '../data.service';
 
