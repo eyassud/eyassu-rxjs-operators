@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IFieldOffice, ISource } from './data.model';
-import { delay, tap } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  public delay = 10000;
+  public delay = 1000;
   private dataUrl = 'api';
 
   constructor(private readonly http: HttpClient) { }

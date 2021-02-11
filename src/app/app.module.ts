@@ -17,10 +17,11 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
 import { Demo2Component } from './demo2/demo2.component';
+import { Demo3Component } from './demo3/demo3.component';
 
 @NgModule({
   declarations: [
-    AppComponent, Demo1Component, Demo2Component
+    AppComponent, Demo1Component, Demo2Component, Demo3Component
   ],
   imports: [
     BrowserModule,

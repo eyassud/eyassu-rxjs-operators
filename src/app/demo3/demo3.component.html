@@ -1,0 +1,15 @@
+<div style="margin:auto; width: 38%;">
+
+  <p-fieldset legend="Solution" [toggleable]="true" [collapsed]="true" [style]="{ }">
+    <p-button label="Get Baltimore and St. Louis Field Offices" (onClick)="onBtnClick()"></p-button>
+    <br />
+    <br />
+    <br />
+
+    <div>
+      <strong>Field Offices: </strong><code *ngIf="(fieldOffices$ | async) as fieldOffices">{{ fieldOffices  | json}}</code>
+    </div>
+  </p-fieldset>
+
+
+</div>

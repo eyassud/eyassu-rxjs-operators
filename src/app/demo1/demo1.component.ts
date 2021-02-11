@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EMPTY, from, Observable, of, Subject, Subscription } from 'rxjs';
+import { EMPTY, Observable, of, Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { IFieldOffice } from '../data.model';
 import { DataService } from '../data.service';
