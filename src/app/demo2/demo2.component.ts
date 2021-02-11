@@ -1,7 +1,7 @@
 import { ThrowStmt } from '@angular/compiler';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EMPTY, Observable, of, Subscription } from 'rxjs';
-import { combineAll, concatMap, map, mergeAll, mergeScan } from 'rxjs/operators';
+import { combineAll, concatMap, map, mergeAll, mergeScan, tap, toArray } from 'rxjs/operators';
 import { IFieldOffice, ISource } from '../data.model';
 import { DataService } from '../data.service';
 
@@ -40,19 +40,20 @@ export class Demo2Component implements OnInit, OnDestroy {
 
   //#region Solution 1
   onBtnClick1(): void {
-    this.subscription1 = of(1, 2, 3)
-      .pipe(
-        map(fieldOfficeId => {
-          this.dataService.getFieldOffice(fieldOfficeId)
-            .subscribe((fieldOffice: IFieldOffice) => {
-              this.dataService.getSourcesByFieldOffice(fieldOffice.id)
-                .subscribe(sources => {
-                  this.sources1 = this.sources1.concat(sources);
-                });
+
+    for (let fieldOfficeId = 1; fieldOfficeId <= 3; fieldOfficeId++) {
+      console.log(`Getting field office ${fieldOfficeId}`);
+
+      this.dataService.getFieldOffice(fieldOfficeId)
+        .subscribe((fieldOffice: IFieldOffice) => {
+          console.log(`Getting sources for ${fieldOffice.name}`);
+
+          this.dataService.getSourcesByFieldOffice(fieldOffice.id)
+            .subscribe(sources => {
+              this.sources1 = sources;
             });
-        })
-      )
-      .subscribe(s => s);
+        });
+    }
   }
   //#endregion
 
@@ -60,15 +61,17 @@ export class Demo2Component implements OnInit, OnDestroy {
   onBtnClick2(): void {
     this.subscription2 = of(1, 2, 3)
       .pipe(
+        tap(fieldOfficeId => console.log(`Getting field office ${fieldOfficeId}`)),
         concatMap(fieldOfficeId =>
           this.dataService.getFieldOffice(fieldOfficeId)
             .pipe(
+              tap(fieldOffice => console.log(`Getting sources for ${fieldOffice.name}`)),
               concatMap(x => this.dataService.getSourcesByFieldOffice(x.id))
             )
         )
       )
       .subscribe(sources => {
-        this.sources2 = this.sources2.concat(sources);
+        this.sources2 = sources;
       });
   }
   //#endregion
@@ -77,14 +80,14 @@ export class Demo2Component implements OnInit, OnDestroy {
   onBtnClick3(): void {
     this.sources3$ = of(1, 2, 3)
       .pipe(
+        tap(fieldOfficeId => console.log(`Getting field office ${fieldOfficeId}`)),
         concatMap(fieldOfficeId =>
           this.dataService.getFieldOffice(fieldOfficeId)
             .pipe(
-              concatMap(fieldOffice => this.dataService.getSourcesByFieldOffice(fieldOffice.id)),
-              combineAll()
+              tap(fieldOffice => console.log(`Getting sources for ${fieldOffice.name}`)),
+              concatMap(fieldOffice => this.dataService.getSourcesByFieldOffice(fieldOffice.id))
             )
-        ),
-        combineAll()
+        )
       );
   }
   //#endregion
