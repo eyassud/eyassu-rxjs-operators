@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { EMPTY, from, Observable, of, Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { IFieldOffice } from '../data.model';
 import { DataService } from '../data.service';
@@ -14,7 +14,6 @@ export class Demo1Component implements OnInit, OnDestroy {
 
   //#region Solution 1
   fieldOffice1: IFieldOffice | null = null;
-  subscription1: Subscription | undefined;
   //#endregion
 
   //#region Solution 2
@@ -28,51 +27,45 @@ export class Demo1Component implements OnInit, OnDestroy {
 
   //#region Solution 3
   fieldOffice3: IFieldOffice | null = null;
-  private solution3Subject = new Subject<number>();
-  solution3Action$ = this.solution3Subject.asObservable()
-    .pipe(
-      switchMap(fieldOfficeId => this.dataService.getFieldOffice(fieldOfficeId)));
+  fieldOfficeSelected$: Observable<IFieldOffice>;
   //#endregion
 
-  constructor(private readonly dataService: DataService) { }
+  constructor(private readonly dataService: DataService) { this.fieldOfficeSelected$ = EMPTY; }
 
   ngOnInit(): void {
     this.dataService.getAllFieldOffices()
       .subscribe(offices => this.fieldOffices = offices);
   }
 
-  ngOnDestroy(): void {
-    this.subscription1?.unsubscribe();
-    this.subscription2?.unsubscribe();
-    this.solution2Subject?.unsubscribe();
-    // ...
-  }
-
-  //#region Solution 1
+  //#region Solution 1 (Avoid)
   onOfficeSelected1(event: any): void {
-    this.log(event);
-    this.subscription1 = this.dataService.getFieldOffice(+event.value)
+    this.dataService.getFieldOffice(+event.value)
       .subscribe(
-        o => this.fieldOffice1 = o);
+        fieldOffice => this.fieldOffice1 = fieldOffice);
   }
   //#endregion
 
-  //#region Solution 2
+  //#region Solution 2 (Better)
   onOfficeSelected2(event: any): void {
-    this.log(event);
-    this.solution2Subject.next(+event.value);
-    this.subscription2 = this.solution2Action$
+    this.subscription2 = of(+event.value)
+      .pipe(
+        switchMap(fieldOfficeId => this.dataService.getFieldOffice(fieldOfficeId)))
       .subscribe(
         fieldOffice => this.fieldOffice2 = fieldOffice);
   }
   //#endregion
 
-  //#region Solution 3
+  //#region Solution 3 (Best)
   onOfficeSelected3(event: any): void {
-    this.log(event);
-    this.solution3Subject.next(+event.value);
+    this.fieldOfficeSelected$ = of(+event.value)
+      .pipe(
+        switchMap(fieldOfficeId => this.dataService.getFieldOffice(fieldOfficeId)));
   }
   //#endregion
+
+  ngOnDestroy(): void {
+    this.subscription2?.unsubscribe();
+  }
 
   //#region Private methods
   private log(event: any): void {

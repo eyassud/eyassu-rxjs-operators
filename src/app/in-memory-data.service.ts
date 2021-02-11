@@ -8,7 +8,7 @@ export class InMemoryDataService implements InMemoryDbService {
   createDb() {
     const fieldOffices = [
       { id: 1, name: 'Baltimore' },
-      { id: 2, name: 'Newyork' },
+      { id: 2, name: 'New York' },
       { id: 3, name: 'St Louis' },
       { id: 4, name: 'Washington D.C.' }
     ];

@@ -1,9 +1,13 @@
 <div style="margin:auto; width: 38%;">
 
   <p-fieldset legend="Solution 1 (Avoid - Order Ignored)" [toggleable]="true" [collapsed]="true" [style]="{ }">
-    <p-dropdown [options]="fieldOffices" optionLabel="name" optionValue="id" (onChange)="onOfficeSelected1($event)"
-      [style]="{'width': '300px'}" [showClear]="true" placeholder="Select an Office"></p-dropdown>
-      <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger" [style]="{'margin-left': '5px'}"></button>
+    <p-dropdown [options]="fieldOffices"
+      optionLabel="name" optionValue="id"
+      (onChange)="onOfficeSelected1($event)"
+      [style]="{'width': '300px'}"
+      [showClear]="true" placeholder="Select an Office"></p-dropdown>
+      <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"
+       [style]="{'margin-left': '5px'}"></button>
     <br />
     <br />
     <br />
@@ -33,7 +37,7 @@
     <br />
     <br />
     <strong>Field Office: </strong><code
-      *ngIf="solution3Action$ | async as fieldOffice">{{ fieldOffice | json }}</code>
+      *ngIf="fieldOfficeSelected$ | async as fieldOffice">{{ fieldOffice | json }}</code>
   </p-fieldset>
 
 </div>
