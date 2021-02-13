@@ -19,10 +19,6 @@ export class Demo1Component implements OnInit, OnDestroy {
   //#region Solution 2
   fieldOffice2: IFieldOffice | null = null;
   subscription2: Subscription | undefined;
-  private solution2Subject = new Subject<number>();
-  solution2Action$ = this.solution2Subject.asObservable()
-    .pipe(
-      switchMap(fieldOfficeId => this.dataService.getFieldOffice(fieldOfficeId)));
   //#endregion
 
   //#region Solution 3

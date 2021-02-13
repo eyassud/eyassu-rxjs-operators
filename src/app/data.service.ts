@@ -8,7 +8,7 @@ import { delay } from 'rxjs/operators';
 })
 export class DataService {
 
-  public delay = 1000;
+  public delay = 10000;
   private dataUrl = 'api';
 
   constructor(private readonly http: HttpClient) { }
